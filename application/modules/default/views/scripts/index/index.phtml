@@ -1,0 +1,25 @@
+<h3>Users</h3>
+<hr>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Business name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->users as $user): ?>
+    <tr>
+        <td><?php echo $user->businessName; ?></td>
+        <td><?php echo $user->email; ?></td>
+        <td>
+            <a class="btn btn-default" href="/index/edit/?id=<?php echo (string) $user->id;?>">Edit</a>
+            <a class="btn btn-danger" href="/index/delete/?id=<?php echo (string) $user->id;?>">Delete</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<a class="btn btn-success" href="/index/adduser">Add new client</a>
