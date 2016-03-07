@@ -33,6 +33,14 @@ class IndexController extends App_Controller_Base
                     'createdDate' => time()
                 ]);
                 $user->save();
+
+                $mdToken = new App_Model_MDToken([
+                    'userId' => (string)$user->id,
+                    'tokens' => [
+                        sha1(uniqid())
+                    ]
+                ]);
+                $mdToken->save();
                 $this->getResponse()->setRedirect('/');
             }
 
@@ -43,7 +51,7 @@ class IndexController extends App_Controller_Base
     public function editAction()
     {
         $user = App_Model_User::fetchOne([
-           'id' => $this->getParam('id', null)
+            'id' => $this->getParam('id', null)
         ]);
         if (!$user) {
             $this->redirect('/');
@@ -57,7 +65,23 @@ class IndexController extends App_Controller_Base
 
             $user->save();
         }
+
+        $token = App_Model_MDToken::fetchOne([
+            'userId' => (string) $user->id
+        ]);
+        if ($token)
+            $this->view->tokens = $token->tokens;
         $this->view->user = $user;
         $this->render('edit');
+    }
+
+    public function deleteAction()
+    {
+        App_Model_User::remove([
+            'id' => new \MongoId($this->getParam('id', null))
+        ]);
+
+        $this->view->users = App_Model_User::fetchAll();
+        $this->render('index');
     }
 }
