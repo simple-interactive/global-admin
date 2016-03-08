@@ -29,8 +29,8 @@ class IndexController extends App_Controller_Base
                 $user = new App_Model_User([
                     'businessName' => $this->getParam('businessName', 'Some Business Name'),
                     'email' => $this->getParam('email', null),
-                    'password' => $this->getParam('password', null),
-                    'createdDate' => time()
+                    'password' => md5($this->getParam('password', null)),
+                    'createdDate' => new \MongoDate()
                 ]);
                 $user->save();
 
@@ -61,7 +61,7 @@ class IndexController extends App_Controller_Base
             $user->businessName = $this->getParam('businessName', null);
             $user->email = $this->getParam('email', null);
             if (!empty($this->getParam('password', null)))
-                $user->password = $this->getParam('password', null);
+                $user->password = md5($this->getParam('password', null));
 
             $user->save();
         }
